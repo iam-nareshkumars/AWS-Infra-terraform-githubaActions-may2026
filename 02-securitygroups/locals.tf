@@ -185,7 +185,7 @@ locals {
 
     }
 
-locals {
+/* locals {
   sg_ids = {
     web_alb  = module.base_securitygroup["web_alb"].sg_id
     app-lb   = module.base_securitygroup["app-lb"].sg_id
@@ -202,7 +202,7 @@ locals {
     ratings  = module.base_securitygroup["ratings"].sg_id
     web      = module.base_securitygroup["web"].sg_id
   }
-}
+} */
 
 # locals {
 #   sg_in_rules = {
