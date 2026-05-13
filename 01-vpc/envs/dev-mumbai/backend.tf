@@ -8,6 +8,5 @@ backend "s3" {
    region = "ap-south-1"
    #profile = "role-jump-vpc-ec2-s3-ff"
    use_lockfile = "false"
-   
-}
+   }
 }
