@@ -1,5 +1,6 @@
 locals {
-  /* sg_map = {
+  sg_map = {
+    /* 
     catalogue = {
       
       sg_name       = "catalogue"
@@ -20,10 +21,10 @@ locals {
              description = "incoming from app-lb"   }
 }
 
-
+ */
   
     }  
- */
+
  catalogue = {
      
       sg_name       = "catalogue"
