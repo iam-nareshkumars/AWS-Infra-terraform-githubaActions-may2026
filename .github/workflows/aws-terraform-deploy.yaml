@@ -65,14 +65,14 @@ jobs:
 
       - name: Terraform Init
         run: |
-          cd 01-vpc
+          cd 01-vpc/envs/dev-mumbai
           terraform init \
             -backend-config="key=vpc/${{ github.event.inputs.Terraform_Environment }}/terraform.tfstate" \
             -reconfigure
 
       - name: Terraform Plan
         run: |
-          cd 01-vpc
+          cd 01-vpc/envs/dev-mumbai
           terraform plan -var="environment=${{ github.event.inputs.Terraform_Environment }}"
 
       - name: Terraform Apply
