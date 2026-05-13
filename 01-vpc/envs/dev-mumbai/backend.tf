@@ -1,6 +1,7 @@
 terraform {
 backend "s3" {
-   bucket = "mumbai-eternal-s3-bucket-terraform-state-file"
+   bucket = "mumbai-eternal-s3-bucket-terraformstate-file"
+   
  #  bucket = "aws-infra-terraform-statefile-bucket-mumbai-002"
    key    = "vpc/dev/ap-south-1/terraform.tfstate"
    encrypt = "true"
