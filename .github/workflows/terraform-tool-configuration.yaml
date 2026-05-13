@@ -1,0 +1,72 @@
+name: Configuration Management with tools -Terraform + Ansible
+
+on:
+  workflow_dispatch:
+    inputs:
+      TOOL:
+        description: "Select terraform target tool to install"
+        required: true
+        type: choice
+        options:
+          - vault
+          - tomcat
+      ENV:
+        description: "Select environment to install"
+        required: true
+        type: choice
+        options:
+           - dev
+           - qa
+           - staging
+           - prod
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: us-east-1
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # AWS OIDC
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
+          aws-region: us-east-1
+
+
+      # Install Ansible
+      - name: Install Ansible
+        run: |
+          sudo apt update
+          sudo apt install -y ansible
+          pip install boto3 botocore
+          ansible-galaxy collection install amazon.aws
+
+      - name: Install Ansible and AWS deps correctly
+        run: |
+           pipx install ansible-core
+           pipx inject ansible-core boto3 botocore
+           ansible-galaxy collection install amazon.aws
+    
+
+      - name: Debug inventory
+        run: |
+         ansible --version
+         ansible-inventory -i 002-tools_install/ansible/inventory/aws_ec2.yml --graph --vars
+
+      # - name: Run Ansible (debug)
+      #   run: |
+      #     bash 002-tools_install/ansible/setup.sh vault -vvv
+
+
+      # Run Ansible via SSM
+      - name: Run Ansible Playbook ${{ github.event.inputs.TOOL }}
+        run: |
+           bash 002-tools_install/ansible/setup.sh ${{ github.event.inputs.TOOL }} ${{ github.event.inputs.ENV }}

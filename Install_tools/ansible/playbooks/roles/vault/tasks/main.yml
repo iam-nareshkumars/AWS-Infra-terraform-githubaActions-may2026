@@ -1,0 +1,43 @@
+---
+- name: Validate toolname is set
+  ansible.builtin.assert:
+    that:
+      - toolname is defined
+      - toolname is not none
+      - toolname | trim | length > 0
+    fail_msg: "toolname variable is missing or empty"
+
+# - name: Set hostname
+#   ansible.builtin.hostname:
+#     name: "{{ toolname }}"
+
+# - name: Install required system utilities
+#   ansible.builtin.dnf:
+#     name: dnf-utils
+#     state: present
+
+
+- name: Set hostname {{ toolname }}
+  ansible.builtin.raw: hostnamectl set-hostname vault
+
+- name: Install yum utils
+  ansible.builtin.raw:  dnf install -y yum-utils
+  
+
+
+- name: Add HashiCorp repository
+  ansible.builtin.get_url:
+    url: https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+    dest: /etc/yum.repos.d/hashicorp.repo
+    mode: '0644'
+
+- name: Install {{ toolname }}
+  ansible.builtin.dnf:
+    name: "{{ toolname }}"
+    state: present
+
+- name: Enable and start {{ toolname }} service
+  ansible.builtin.service:
+    name: "{{ toolname }}"
+    enabled: true
+    state: started

@@ -1,0 +1,53 @@
+module "tools" {
+  for_each      =  var.tools
+  source        =  "./modules"
+  ami           = data.aws_ami.main.id
+  instance_type = each.value["instance_type"]
+  Name          = each.value["Name"]
+  zone_id       = data.aws_route53_zone.tools.zone_id
+  domain        = var.domain
+  port_no       = each.value["port_no"]
+  instance_profile = data.aws_iam_instance_profile.ssm_profile.name
+  environment = var.environment
+  project = var.project
+
+}
+
+# resource "aws_instance" "my_ec2" {
+#   launch_template {
+#     id      = "lt-01469ce463faed971"
+#     version = "6"
+#   }
+
+#   tags = {
+#     Name = "MyEC2FromTemplate"
+#   }
+# }
+
+
+# resource "null_resource" "main" {
+
+
+#   triggers = {
+#     timestamp = timestamp()
+#   }
+  
+
+#   connection {
+#     type     = "ssh"
+#     user     = var.user
+#     password = var.password
+#     host     = "vault.eternallearnings.shop"
+#   }
+
+#   provisioner "remote-exec" {
+
+#     inline = [
+#       "sleep 10",
+#       "pwd",
+#       "echo Running playbook",
+#       "ansible-playbook -i vault.eternallearnings.shop -e toolname=vault 002-tools_install/main.yml"
+#     ]
+#   }
+
+
