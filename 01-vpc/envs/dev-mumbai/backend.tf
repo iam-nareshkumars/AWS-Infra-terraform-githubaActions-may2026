@@ -7,7 +7,7 @@ backend "s3" {
    encrypt = "true"
    region = "ap-south-1"
    #profile = "role-jump-vpc-ec2-s3-ff"
-   use_lockfile = "true"
+   use_lockfile = "false"
    
 }
 }
